@@ -1,3 +1,5 @@
+<img width="2122" height="878" alt="brave_Xq5trboVcL" src="https://github.com/user-attachments/assets/665ca8e9-a551-4fcd-93b2-a57028cc12bc" />
+
 This is an exporter for Prometheus that can scrape SRT stats from [OpenIRL's SRTla receiver](https://github.com/OpenIRL/srtla-receiver) and receive the websocket messages from BELABOX (sorta like BELABOX Cloud) using [my homemade solution](https://github.com/roflb0y/BELABOX-Cloud-Homemade).
 
 ### Installing:
