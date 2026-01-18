@@ -1,4 +1,4 @@
-This is an exporter for Prometheus that can scrape SRT stats from [OpenIRL's SRTla receiver](https://github.com/OpenIRL/srtla-receiver) and receive the websocket messages from BELABOX (sorta like BELABOX Cloud) using [https://github.com/roflb0y/BELABOX-Cloud-Homemade](my homemade solution).
+This is an exporter for Prometheus that can scrape SRT stats from [OpenIRL's SRTla receiver](https://github.com/OpenIRL/srtla-receiver) and receive the websocket messages from BELABOX (sorta like BELABOX Cloud) using [my homemade solution](https://github.com/roflb0y/BELABOX-Cloud-Homemade).
 
 ### Installing:
 1. Make sure to have Node v22+ and Typescript v5.8.3+ installed.
