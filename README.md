@@ -21,7 +21,7 @@ This is an exporter for Prometheus that can scrape SRT stats from [OpenIRL's SRT
    tsc
    npm run prod
    ```
-   If everything works correctly, you should see your metrics page at ```http://<ip>:5050/metrics```
+   If everything works correctly, you should see your metrics page at ```http://<ip>:5050/metrics```.
    Then you should start your application using a process manager, for example pm2:
    ```shell
    npm i pm2 -g
