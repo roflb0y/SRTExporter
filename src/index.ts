@@ -77,9 +77,9 @@ router.get("/metrics", async (ctx) => {
             .set(stream.publisher?.dropped_pkts ?? 0);
     }
 
+    belaboxNetifBitrate.reset();
     if (belabox.netif) {
         //console.log(belabox.netif);
-        belaboxNetifBitrate.reset();
         for (const item of Object.keys(belabox.netif)) {
             belaboxNetifBitrate
                 .labels(item)
