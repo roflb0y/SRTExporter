@@ -29,3 +29,9 @@ This is an exporter for Prometheus that can scrape SRT stats from [OpenIRL's SRT
    npm i pm2 -g
    pm2 start ./dist/index.js --name SRTExporter
    ```
+7. Add the target to the config of Prometheus
+   ```
+   nano /etc/prometheus/prometheus.yml
+
+   add "localhost:5050" to targets
+   ```
