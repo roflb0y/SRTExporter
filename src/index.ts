@@ -44,18 +44,24 @@ const srtStreamRTT = new Gauge({
 register.registerMetric(srtStreamRTT);
 
 const belaboxSensors = new Gauge({
-    name: "belaboxSensors",
+    name: "belabox_sensors",
     help: "belabox sensors data",
     labelNames: ["type"],
 });
 register.registerMetric(belaboxSensors);
 
 const belaboxNetifBitrate = new Gauge({
-    name: "belaboxNetif",
+    name: "belabox_netif",
     help: "belabox net data",
     labelNames: ["name"],
 });
 register.registerMetric(belaboxNetifBitrate);
+
+const belaboxMaxBitrate = new Gauge({
+    name: "belabox_max_br",
+    help: "belabox max br",
+});
+register.registerMetric(belaboxMaxBitrate);
 
 const updater = new Updater();
 updater.start();
@@ -87,6 +93,9 @@ router.get("/metrics", async (ctx) => {
         }
     }
 
+    belaboxMaxBitrate.reset();
+    if (belabox.maxBitrate) belaboxMaxBitrate.set(belabox.maxBitrate);
+
     belaboxSensors.labels("temp").set(belabox.sensors?.temp ?? 0);
     belaboxSensors.labels("rtmpIngest").set(belabox.sensors?.rtmpIngest ?? 0);
 
@@ -106,10 +115,20 @@ router.post("/belaboxstats", async (ctx) => {
         //console.log(sensors);
         belabox.sensors = sensors;
     }
+
+    if (data.bitrate?.max_br) {
+        belabox.maxBitrate = data.bitrate.max_br;
+    }
+
+    if (data.config?.max_br) {
+        belabox.maxBitrate = data.config?.max_br;
+    }
+
     clearTimeout(belaboxTimeout);
     belaboxTimeout = setInterval(() => {
         belabox.sensors = undefined;
         belabox.netif = undefined;
+        belabox.maxBitrate = undefined;
         log("reset belabox data after 10s");
     }, 10000);
     return (ctx.body = "1");
