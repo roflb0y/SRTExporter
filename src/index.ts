@@ -6,13 +6,15 @@ import { bodyParser } from "@koa/bodyparser";
 import { Updater } from "./updater";
 import { parseSensors } from "./utils";
 import { belabox } from "./belabox";
-import { NetifI } from "./interface";
+import { BelaboxNetif } from "./interface";
 
 const PORT = 5050;
 
 const register = new Registry();
 const app = new Koa();
 const router = new Router();
+
+let belaboxTimeout: NodeJS.Timeout;
 
 app.use(bodyParser());
 
@@ -65,7 +67,7 @@ router.get("/metrics", async (ctx) => {
         const stream = updater.streams[item.player];
         if (!stream) continue;
 
-        console.log(`setting ${JSON.stringify(stream)}`);
+        //console.log(`setting ${JSON.stringify(stream)}`);
         srtStreamBitrate
             .labels(item.player)
             .set(stream.publisher?.bitrate ?? 0);
@@ -76,7 +78,7 @@ router.get("/metrics", async (ctx) => {
     }
 
     if (belabox.netif) {
-        console.log(belabox.netif);
+        //console.log(belabox.netif);
         belaboxNetifBitrate.reset();
         for (const item of Object.keys(belabox.netif)) {
             belaboxNetifBitrate
@@ -96,7 +98,7 @@ router.post("/belaboxstats", async (ctx) => {
     log(`got belabox message: ${JSON.stringify(ctx.request.body)}`);
 
     if (data.netif) {
-        belabox.netif = data.netif as NetifI;
+        belabox.netif = data.netif as BelaboxNetif;
     }
 
     if (data.sensors) {
@@ -104,6 +106,12 @@ router.post("/belaboxstats", async (ctx) => {
         //console.log(sensors);
         belabox.sensors = sensors;
     }
+    clearTimeout(belaboxTimeout);
+    belaboxTimeout = setInterval(() => {
+        belabox.sensors = undefined;
+        belabox.netif = undefined;
+        log("reset belabox data after 10s");
+    }, 10000);
     return (ctx.body = "1");
 });
 

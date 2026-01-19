@@ -33,7 +33,7 @@ export interface Config {
     updateInterval: number;
 }
 
-export interface NetifI {
+export interface BelaboxNetif {
     [network: string]: {
         ip: string,
         tp: number,
@@ -42,7 +42,7 @@ export interface NetifI {
     }
 }
 
-export interface SensorsI {
+export interface BelaboxSensors {
     rtmpIngest?: number
     temp: number
 }

@@ -1,8 +1,8 @@
-import { NetifI, SensorsI } from "./interface";
+import { BelaboxNetif, BelaboxSensors } from "./interface";
 
 export class BelaboxStats {
-    sensors: SensorsI | undefined;
-    netif: NetifI | undefined;
+    sensors: BelaboxSensors | undefined;
+    netif: BelaboxNetif | undefined;
 
     constructor() {
         this.sensors;

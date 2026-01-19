@@ -29,7 +29,7 @@ export async function getStreamIDS(): Promise<SRTStreamIds> {
     log("getting /api/stream-ids");
     const res = await sendApiRequest<SRTStreamIds>("/api/stream-ids");
 
-    console.log(res.data);
+    log(`Got ${res.data.data.length} stream ids`);
     if (!res.data) throw new Error("stream ids undefined");
 
     return res.data;
