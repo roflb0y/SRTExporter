@@ -28,6 +28,8 @@ export interface SRTStreams {
 }
 
 export interface Config {
+    METRICS_PORT: number;
+    WS_PORT: number;
     BASE_URL: string;
     API_KEY: string;
     updateInterval: number;

@@ -1,4 +1,7 @@
-# All parameters can be changed dynamically
+METRICS_PORT: 5050
+WS_PORT: 5055
+
+# All parameters below can be changed dynamically
 
 BASE_URL: http://1.2.3.4:8080 # Base url of the OpenIRL stats page
 API_KEY: fkdjshgbdf # OpenIRL API key

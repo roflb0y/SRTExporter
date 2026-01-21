@@ -4,17 +4,14 @@ import Router from "@koa/router";
 import { bodyParser } from "@koa/bodyparser";
 
 import { Updater } from "./updater";
-import { parseSensors } from "./utils";
 import { belabox } from "./belabox";
-import { BelaboxNetif } from "./interface";
+import { getConfig } from "./config";
 
-const PORT = 5050;
+const config = getConfig();
 
 const register = new Registry();
 const app = new Koa();
 const router = new Router();
-
-let belaboxTimeout: NodeJS.Timeout;
 
 app.use(bodyParser());
 
@@ -85,7 +82,6 @@ router.get("/metrics", async (ctx) => {
 
     belaboxNetifBitrate.reset();
     if (belabox.netif) {
-        //console.log(belabox.netif);
         for (const item of Object.keys(belabox.netif)) {
             belaboxNetifBitrate
                 .labels(item)
@@ -102,38 +98,6 @@ router.get("/metrics", async (ctx) => {
     return (ctx.body = await register.metrics());
 });
 
-router.post("/belaboxstats", async (ctx) => {
-    const data = ctx.request.body;
-    log(`got belabox message: ${JSON.stringify(ctx.request.body)}`);
-
-    if (data.netif) {
-        belabox.netif = data.netif as BelaboxNetif;
-    }
-
-    if (data.sensors) {
-        const sensors = parseSensors(data.sensors);
-        //console.log(sensors);
-        belabox.sensors = sensors;
-    }
-
-    if (data.bitrate?.max_br) {
-        belabox.maxBitrate = data.bitrate.max_br;
-    }
-
-    if (data.config?.max_br) {
-        belabox.maxBitrate = data.config?.max_br;
-    }
-
-    clearTimeout(belaboxTimeout);
-    belaboxTimeout = setInterval(() => {
-        belabox.sensors = undefined;
-        belabox.netif = undefined;
-        belabox.maxBitrate = undefined;
-        log("reset belabox data after 10s");
-    }, 10000);
-    return (ctx.body = "1");
-});
-
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(async (ctx, next) => {
@@ -143,6 +107,6 @@ app.use(async (ctx, next) => {
 
 log("Starting server");
 
-app.listen(PORT, () => {
-    log(`Listening on ${PORT}`);
+app.listen(config.METRICS_PORT, () => {
+    log(`Listening on ${config.METRICS_PORT}`);
 });
